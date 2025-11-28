@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Minus, Plus } from "lucide-react";
 import { useState } from "react";
+import { ProductConfigDrawer } from "./ProductConfigDrawer";
 
 interface ProductCardProps {
   image: string;
@@ -21,6 +22,7 @@ export const ProductCard = ({
   isConfigurable = false,
 }: ProductCardProps) => {
   const [quantity, setQuantity] = useState(0);
+  const [configOpen, setConfigOpen] = useState(false);
 
   const handleIncrement = () => setQuantity(quantity + 1);
   const handleDecrement = () => setQuantity(Math.max(0, quantity - 1));
@@ -51,9 +53,22 @@ export const ProductCard = ({
       </div>
 
       {isConfigurable ? (
-        <Button variant="default" className="rounded-full px-6">
-          CONFIGURE
-        </Button>
+        <>
+          <Button 
+            variant="default" 
+            className="rounded-full px-6"
+            onClick={() => setConfigOpen(true)}
+          >
+            CONFIGURE
+          </Button>
+          <ProductConfigDrawer
+            open={configOpen}
+            onOpenChange={setConfigOpen}
+            image={image}
+            title={title}
+            price={price}
+          />
+        </>
       ) : (
         <div className="flex items-center gap-2">
           {quantity > 0 && (
