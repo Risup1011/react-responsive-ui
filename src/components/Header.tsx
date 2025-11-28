@@ -1,9 +1,18 @@
 import { Calendar, Clock, Headphones, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { OrderDetailsDrawer } from "./OrderDetailsDrawer";
 
 export const Header = () => {
   const [activeTab, setActiveTab] = useState<"pickup" | "delivery">("pickup");
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [drawerType, setDrawerType] = useState<"pickup" | "delivery">("pickup");
+
+  const handleTabClick = (type: "pickup" | "delivery") => {
+    setActiveTab(type);
+    setDrawerType(type);
+    setDrawerOpen(true);
+  };
 
   return (
     <header className="sticky top-0 z-50 bg-background border-b border-border">
@@ -14,21 +23,24 @@ export const Header = () => {
             <div className="flex gap-2">
               <Button
                 variant={activeTab === "pickup" ? "default" : "secondary"}
-                onClick={() => setActiveTab("pickup")}
+                onClick={() => handleTabClick("pickup")}
                 className="rounded-full"
               >
                 Pickup
               </Button>
               <Button
                 variant={activeTab === "delivery" ? "default" : "secondary"}
-                onClick={() => setActiveTab("delivery")}
+                onClick={() => handleTabClick("delivery")}
                 className="rounded-full"
               >
                 Delivery
               </Button>
             </div>
             
-            <div className="flex items-center gap-3">
+            <div 
+              className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
+              onClick={() => setDrawerOpen(true)}
+            >
               <div className="flex items-center gap-2 text-foreground">
                 <Calendar className="w-5 h-5" />
                 <span className="font-medium">Saturday, Nov 29</span>
@@ -51,6 +63,12 @@ export const Header = () => {
           </div>
         </div>
       </div>
+
+      <OrderDetailsDrawer
+        open={drawerOpen}
+        onOpenChange={setDrawerOpen}
+        defaultType={drawerType}
+      />
     </header>
   );
 };
